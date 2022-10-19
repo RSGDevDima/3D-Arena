@@ -7,11 +7,11 @@ using UnityEngine.SceneManagement;
 
 public class GameUI : MonoBehaviour
 {
+    [SerializeField] private GameManager _gameManager;
     [SerializeField] private TMP_Text _killsText;
     [SerializeField] private TMP_Text _hpText;
     [SerializeField] private TMP_Text _strengthText;
     [SerializeField] private TMP_Text _endgameKillsText;
-
     [SerializeField] private GameObject _pauseScreen;
     [SerializeField] private GameObject _endgameScreen;
     [SerializeField] private GameObject _ultraButton;
@@ -26,16 +26,13 @@ public class GameUI : MonoBehaviour
         GlobalEventManager.OnPlayerInit.AddListener(InitPlayerValues);
         GlobalEventManager.OnScoreInit.AddListener(InitScore);
         GlobalEventManager.OnUltraStateChanged.AddListener(ToggleUltraButton);
-
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape)){
-            OpenPause();
-            Time.timeScale = 0;
-            Cursor.lockState = CursorLockMode.None;
-        }
+        // pause
+        if (Input.GetKeyDown(KeyCode.Escape))
+            Pause();
     }
 
     private void InitPlayerValues(float health, float maxHealth, float strength, float maxStrength)
@@ -81,14 +78,20 @@ public class GameUI : MonoBehaviour
         _endgameScreen.active = false;
     }
 
-    public void OpenPause()
-    {
-        _pauseScreen.active = true;
-    }
-
     public void OpenEndgame()
     {
         _endgameScreen.active = true;
+    }
+
+    public void Pause()
+    {
+        _gameManager.StopGame();
+        OpenPause();
+    }
+
+    public void OpenPause()
+    {
+        _pauseScreen.active = true;
     }
 
     public void LoadGameScene()

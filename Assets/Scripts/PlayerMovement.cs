@@ -23,40 +23,78 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        HandlePlayerRotate();
-        HandlePlayerMove();
+        HandleMovement();
     }
 
-    private void HandlePlayerMove()
+    private void HandleMovement()
     {
-        float horizontalAxis = _joystick.Horizontal;
-        float verticalAxis = _joystick.Vertical;
-
-        Vector3 moveVector = (transform.right.normalized * horizontalAxis + transform.forward.normalized * verticalAxis);
-        _characterController.Move(moveVector * Time.deltaTime * _movementSpeed);
+        if (Input.touchCount == 0)
+        {
+            // Keyboard
+            MouseHeadMovement();
+            KeyboardPlayerMove();
+        }
+        else
+        {
+            // Touch
+            TouchHeadMovement();
+            TouchPlayerMove();
+        }
     }
 
-    private void HandlePlayerRotate()
+    private void KeyboardPlayerMove()
+    {
+        var axis = new Vector2(Input.GetAxis("Horizontal"),Input.GetAxis("Vertical"));
+        MovePlayer(axis);
+    }
+
+    private void TouchPlayerMove()
+    {
+        var axis = new Vector2(_joystick.Horizontal, _joystick.Vertical);
+        MovePlayer(axis);
+    }
+
+    void MouseHeadMovement()
+    {
+        Vector2 delta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y")) * _sensetive * 100 * Time.deltaTime;
+        RotateCamera(delta);
+    }
+
+    void TouchHeadMovement()
     {
         foreach (var touch in Input.touches)
         {
             // if touch in right side of the screen
             if (touch.position.x > Screen.width / 2)
             {
-                Vector2 delta = touch.deltaPosition;
-                float mouseX = delta.x * _sensetive * Time.deltaTime;
-                float mouseY = -delta.y * _sensetive * Time.deltaTime;
-
-                transform.rotation *= Quaternion.EulerAngles(new Vector3(0, mouseX, 0));
-
-                Quaternion newHeadRotation = _headObject.transform.rotation * Quaternion.EulerAngles(new Vector3(mouseY, 0, 0));
-                Quaternion bodyRotation = transform.rotation;
-
-                float verticalDegreeDiff = Quaternion.Angle(newHeadRotation, bodyRotation);
-                if (verticalDegreeDiff <= _verticalCameraLimit)
-                    SetHeadRotation(newHeadRotation);
+                Vector2 delta = touch.deltaPosition * _sensetive * Time.deltaTime;
+                RotateCamera(delta);
             }
         }
+    }
+
+    void MovePlayer(Vector2 axis)
+    {
+        float horizontalAxis = axis.x;
+        float verticalAxis = axis.y;
+
+        Vector3 moveVector = (transform.right.normalized * horizontalAxis + transform.forward.normalized * verticalAxis);
+        _characterController.Move(moveVector * Time.deltaTime * _movementSpeed);
+    }
+
+    void RotateCamera(Vector2 delta)
+    {
+        float mouseX = delta.x;
+        float mouseY = -delta.y;
+
+        transform.rotation *= Quaternion.EulerAngles(new Vector3(0, mouseX, 0));
+
+        Quaternion newHeadRotation = _headObject.transform.rotation * Quaternion.EulerAngles(new Vector3(mouseY, 0, 0));
+        Quaternion bodyRotation = transform.rotation;
+
+        float verticalDegreeDiff = Quaternion.Angle(newHeadRotation, bodyRotation);
+        if (verticalDegreeDiff <= _verticalCameraLimit)
+            SetHeadRotation(newHeadRotation);
     }
 
     private void SetHeadRotation(Quaternion newRotation)

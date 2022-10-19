@@ -147,7 +147,7 @@ MonoBehaviour:
   _attackRange: 2
   _maxHealth: 100
   _strengthReward: 50
-  timeBetweenAttacks: 1.8
+  TimeBetweenAttacks: 3
   _enemyBulletObject: {fileID: -7396501103816661775, guid: 9aeac8b2126ea0845814e0ab4dbceb9a,
     type: 3}
 --- !u!1 &2234392802310699911

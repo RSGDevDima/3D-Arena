@@ -14,6 +14,12 @@ public class PlayerShooting : MonoBehaviour
         _shellSpeed /= 10;
     }
 
+    private void Update()
+    {
+        if (Input.touchCount == 0 && Input.GetMouseButtonDown(0))
+            Shoot();
+    }
+
     public void Shoot(){
         if(_shootProcess == null)
             _shootProcess = StartCoroutine(ShootSequence());

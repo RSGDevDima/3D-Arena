@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657868, g: 0.49641263, b: 0.57481706, a: 1}
+  m_IndirectSpecularColor: {r: 0.44402242, g: 0.49316543, b: 0.5722324, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -333,6 +333,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd350555de2c3a54f9a0df9fca2db407, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _gameUI: {fileID: 0}
 --- !u!4 &75161060
 Transform:
   m_ObjectHideFlags: 0
@@ -1110,20 +1111,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 427d77b6ecb156d409b40e7301129e09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemsToPull:
+  _itemsToPull:
+  - ObjectToPool: {fileID: 2234392802281604228, guid: 0a8f18314804b55478a916cb1c6d3c01,
+      type: 3}
+    PremadeAmount: 5
   - ObjectToPool: {fileID: 6839995877156282565, guid: 87a5b24f658918048bb5fa07235f20a4,
       type: 3}
-    PremadeAmount: 20
-  - ObjectToPool: {fileID: 2234392802281604228, guid: 0a8f18314804b55478a916cb1c6d3c01,
+    PremadeAmount: 25
+  - ObjectToPool: {fileID: 6980198820433692443, guid: 9aeac8b2126ea0845814e0ab4dbceb9a,
       type: 3}
     PremadeAmount: 10
   - ObjectToPool: {fileID: 5173020495195435001, guid: 09a45cda95fb66b4f9d171c244048436,
       type: 3}
     PremadeAmount: 15
-  - ObjectToPool: {fileID: 6980198820433692443, guid: 9aeac8b2126ea0845814e0ab4dbceb9a,
-      type: 3}
-    PremadeAmount: 10
-  pool: []
+  Pool: []
 --- !u!1 &247578953
 GameObject:
   m_ObjectHideFlags: 0
@@ -2309,6 +2310,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: faa77af175f08f2458e80220df3e2134, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _gameManager: {fileID: 75161059}
   _killsText: {fileID: 784424114}
   _hpText: {fileID: 2006269983}
   _strengthText: {fileID: 273540665}

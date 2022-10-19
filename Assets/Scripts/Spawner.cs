@@ -20,8 +20,8 @@ public class Spawner : MonoBehaviour
     private float _currentRedAmount = 0;
     private float _currentBlueAmount = 0;
 
-    private const string RED_ENEMY_TAG = "RedEnemy";
-    private const string BLUE_ENEMY_TAG = "BlueEnemy";
+    private const string _redEnemyTag = "RedEnemy";
+    private const string _blueEnemyTag = "BlueEnemy";
 
     void Start()
     {
@@ -57,13 +57,13 @@ public class Spawner : MonoBehaviour
 
             if (blueAmount > _currentBlueAmount && availableRedAmount <= 0)
             {
-                SpawnEnemy(BLUE_ENEMY_TAG, spawnPoint);
+                SpawnEnemy(_blueEnemyTag, spawnPoint);
                 _currentBlueAmount++;
             }
             else if (availableRedAmount > 0)
             {
                 spawnPoint.y = _redEnemyYSpawnPoint; // To spawn red on the "second floor"
-                SpawnEnemy(RED_ENEMY_TAG, spawnPoint);
+                SpawnEnemy(_redEnemyTag, spawnPoint);
                 _currentRedAmount++;
             }
         }

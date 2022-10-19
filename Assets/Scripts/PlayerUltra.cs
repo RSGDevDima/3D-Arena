@@ -18,6 +18,13 @@ public class PlayerUltra : MonoBehaviour
         GlobalEventManager.OnStrenghtChange.AddListener(checkUltra);
     }
 
+    private void Update()
+    {
+        if(Input.GetKey(KeyCode.Space) && Input.touchCount == 0){
+            UseUltra();
+        }
+    }
+
     private void checkUltra(float strenght, float maxStrenght)
     {
         if (strenght == maxStrenght)

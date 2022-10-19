@@ -62,9 +62,12 @@ public class BombShell : MonoBehaviour
 
         if (tag != "BlueEnemy" && tag != "RedEnemy")
         {
+            SpawnParticle("ExplosionParticle");
             gameObject.SetActive(false);
             return;
         }
+
+        SpawnParticle("HitParticle");
 
         GlobalEventManager.OnEnemyDamage.Fire();
         HandleDamage(other);
@@ -122,5 +125,12 @@ public class BombShell : MonoBehaviour
     private float GetDamage()
     {
         return Random.Range(_minDamage, _maxDamage);
+    }
+
+    private void SpawnParticle(string particleTag)
+    {
+        GameObject particle = ObjectPooller.Current.GetPooledObject(particleTag);
+        particle.transform.position = transform.position;
+        particle.SetActive(true);
     }
 }

@@ -9,6 +9,8 @@ TagManager:
   - BlueEnemy
   - RedEnemy
   - EnemyShell
+  - HitParticle
+  - ExplosionParticle
   layers:
   - Default
   - TransparentFX

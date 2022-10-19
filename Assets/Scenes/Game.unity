@@ -1124,6 +1124,12 @@ MonoBehaviour:
   - ObjectToPool: {fileID: 5173020495195435001, guid: 09a45cda95fb66b4f9d171c244048436,
       type: 3}
     PremadeAmount: 15
+  - ObjectToPool: {fileID: 409956055024856371, guid: 7e09e670e43b69f40beba54566450539,
+      type: 3}
+    PremadeAmount: 10
+  - ObjectToPool: {fileID: 409956055024856371, guid: 80e0e7a2f3d31bf4aa5a2335169c3cc0,
+      type: 3}
+    PremadeAmount: 10
   Pool: []
 --- !u!1 &247578953
 GameObject:
@@ -2258,9 +2264,9 @@ Canvas:
   m_GameObject: {fileID: 551167930}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 1
+  m_RenderMode: 0
   m_Camera: {fileID: 1405514187}
-  m_PlaneDistance: 0.1
+  m_PlaneDistance: 0.011
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
@@ -5683,7 +5689,7 @@ MonoBehaviour:
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
-    m_FadeDuration: 0.1
+    m_FadeDuration: 0.01
   m_SpriteState:
     m_HighlightedSprite: {fileID: 0}
     m_PressedSprite: {fileID: 0}

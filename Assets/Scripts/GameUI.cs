@@ -32,8 +32,7 @@ public class GameUI : MonoBehaviour
         GlobalEventManager.OnUltraStateChanged.AddListener(ToggleUltraButton);
         GlobalEventManager.OnEnemyDamage.AddListener(ShowHitIndicator);
     }
-
-    private void Update()
+    private void LateUpdate()
     {
         // pause
         if (Input.GetKeyDown(KeyCode.Escape))

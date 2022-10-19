@@ -7,25 +7,25 @@ using UnityEngine.SceneManagement;
 
 public class GameUI : MonoBehaviour
 {
-    [SerializeField] TMP_Text _killsText;
-    [SerializeField] TMP_Text _hpText;
-    [SerializeField] TMP_Text _strengthText;
-    [SerializeField] TMP_Text _endgameKillsText;
+    [SerializeField] private TMP_Text _killsText;
+    [SerializeField] private TMP_Text _hpText;
+    [SerializeField] private TMP_Text _strengthText;
+    [SerializeField] private TMP_Text _endgameKillsText;
 
-    [SerializeField] GameObject _pauseScreen;
-    [SerializeField] GameObject _endgameScreen;
-    [SerializeField] GameObject _ultraButton;
+    [SerializeField] private GameObject _pauseScreen;
+    [SerializeField] private GameObject _endgameScreen;
+    [SerializeField] private GameObject _ultraButton;
 
 
     private void OnEnable()
     {
-        GlobalEventManager.OnScoreChange.AddListener(setKills);
-        GlobalEventManager.OnHealthChange.AddListener(setHP);
-        GlobalEventManager.OnStrenghtChange.AddListener(setStrength);
-        GlobalEventManager.OnEndgame.AddListener(activateEndgameScreen);
-        GlobalEventManager.OnPlayerInit.AddListener(initPlayerValues);
-        GlobalEventManager.OnScoreInit.AddListener(initScore);
-        GlobalEventManager.OnUltraStateChanged.AddListener(toggleUltraButton);
+        GlobalEventManager.OnScoreChange.AddListener(SetKills);
+        GlobalEventManager.OnHealthChange.AddListener(SetHP);
+        GlobalEventManager.OnStrenghtChange.AddListener(SetStrength);
+        GlobalEventManager.OnEndgame.AddListener(ActivateEndgameScreen);
+        GlobalEventManager.OnPlayerInit.AddListener(InitPlayerValues);
+        GlobalEventManager.OnScoreInit.AddListener(InitScore);
+        GlobalEventManager.OnUltraStateChanged.AddListener(ToggleUltraButton);
 
     }
 
@@ -38,39 +38,39 @@ public class GameUI : MonoBehaviour
         }
     }
 
-    void initPlayerValues(float health, float maxHealth, float strength, float maxStrength)
+    private void InitPlayerValues(float health, float maxHealth, float strength, float maxStrength)
     {
-        setHP(health, maxHealth);
-        setStrength(strength, maxStrength);
+        SetHP(health, maxHealth);
+        SetStrength(strength, maxStrength);
     }
 
-    void initScore(int score)
+    private void InitScore(int score)
     {
-        setKills(score);
+        SetKills(score);
     }
 
-    void setKills(int score)
+    private void SetKills(int score)
     {
         _killsText.text = score.ToString();
     }
 
-    void setHP(float currentHp, float maxHp)
+    private void SetHP(float currentHp, float maxHp)
     {
         _hpText.text = currentHp + "/" + maxHp;
     }
 
-    void setStrength(float currentStrength, float maxStrngth)
+    private void SetStrength(float currentStrength, float maxStrngth)
     {
         _strengthText.text = currentStrength + "/" + maxStrngth;
     }
 
-    void activateEndgameScreen()
+    private void ActivateEndgameScreen()
     {
-        setEndgameKillsText(_killsText.text);
+        SetEndgameKillsText(_killsText.text);
         OpenEndgame();
     }
 
-    void setEndgameKillsText(string text)
+    private void SetEndgameKillsText(string text)
     {
         _endgameKillsText.text = text;
     }
@@ -101,7 +101,7 @@ public class GameUI : MonoBehaviour
         SceneManager.LoadScene("MainMenu");
     }
 
-    void toggleUltraButton(bool ultraState)
+    private void ToggleUltraButton(bool ultraState)
     {
         if (ultraState)
         {
@@ -115,13 +115,12 @@ public class GameUI : MonoBehaviour
 
     private void OnDestroy()
     {
-        GlobalEventManager.OnScoreChange.RemoveListener(setKills);
-        GlobalEventManager.OnHealthChange.RemoveListener(setHP);
-        GlobalEventManager.OnStrenghtChange.RemoveListener(setStrength);
-        GlobalEventManager.OnEndgame.RemoveListener(activateEndgameScreen);
-        GlobalEventManager.OnPlayerInit.RemoveListener(initPlayerValues);
-        GlobalEventManager.OnScoreInit.RemoveListener(initScore);
-        GlobalEventManager.OnUltraStateChanged.RemoveListener(toggleUltraButton);
-
+        GlobalEventManager.OnScoreChange.RemoveListener(SetKills);
+        GlobalEventManager.OnHealthChange.RemoveListener(SetHP);
+        GlobalEventManager.OnStrenghtChange.RemoveListener(SetStrength);
+        GlobalEventManager.OnEndgame.RemoveListener(ActivateEndgameScreen);
+        GlobalEventManager.OnPlayerInit.RemoveListener(InitPlayerValues);
+        GlobalEventManager.OnScoreInit.RemoveListener(InitScore);
+        GlobalEventManager.OnUltraStateChanged.RemoveListener(ToggleUltraButton);
     }
 }

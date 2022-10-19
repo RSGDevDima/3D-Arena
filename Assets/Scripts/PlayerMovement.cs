@@ -5,38 +5,38 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] float _movementSpeed;
-    [SerializeField] float _sensetive;
-    [SerializeField] GameObject _headObject;
-    [SerializeField] float _verticalCameraLimit = 75f;
-    [SerializeField] Joystick _joystick;
+    [SerializeField] private float _movementSpeed;
+    [SerializeField] private float _sensetive;
+    [SerializeField] private GameObject _headObject;
+    [SerializeField] private float _verticalCameraLimit = 75f;
+    [SerializeField] private Joystick _joystick;
 
-    CharacterController characterController;
-    float xCameraRotation;
+    private CharacterController _characterController;
+    private float _xCameraRotation;
 
     private void Awake()
     {
-        characterController = GetComponent<CharacterController>();
-        setHeadRotation(transform.rotation);
+        _characterController = GetComponent<CharacterController>();
+        SetHeadRotation(transform.rotation);
         _sensetive /= 1000;
     }
 
     private void Update()
     {
-        handlePlayerRotate();
-        handlePlayerMove();
+        HandlePlayerRotate();
+        HandlePlayerMove();
     }
 
-    void handlePlayerMove()
+    private void HandlePlayerMove()
     {
         float horizontalAxis = _joystick.Horizontal;
         float verticalAxis = _joystick.Vertical;
 
         Vector3 moveVector = (transform.right.normalized * horizontalAxis + transform.forward.normalized * verticalAxis);
-        characterController.Move(moveVector * Time.deltaTime * _movementSpeed);
+        _characterController.Move(moveVector * Time.deltaTime * _movementSpeed);
     }
 
-    void handlePlayerRotate()
+    private void HandlePlayerRotate()
     {
         foreach (var touch in Input.touches)
         {
@@ -54,12 +54,12 @@ public class PlayerMovement : MonoBehaviour
 
                 float verticalDegreeDiff = Quaternion.Angle(newHeadRotation, bodyRotation);
                 if (verticalDegreeDiff <= _verticalCameraLimit)
-                    setHeadRotation(newHeadRotation);
+                    SetHeadRotation(newHeadRotation);
             }
         }
     }
 
-    void setHeadRotation(Quaternion newRotation)
+    private void SetHeadRotation(Quaternion newRotation)
     {
         _headObject.transform.rotation = newRotation;
     }

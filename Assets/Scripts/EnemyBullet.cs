@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class EnemyBullet : MonoBehaviour
 {
-    [SerializeField] float strengthDamage = 25f;
+    [SerializeField] private float _strengthDamage = 25f;
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Player")
         {
             Player player = other.gameObject.GetComponent<Player>();
-            player.ApplyStrenghtChanges(strengthDamage);
+            player.ApplyStrenghtChanges(_strengthDamage);
 
             gameObject.SetActive(false);
         }

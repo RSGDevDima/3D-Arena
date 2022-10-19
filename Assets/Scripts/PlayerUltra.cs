@@ -5,20 +5,20 @@ using UnityEngine;
 [RequireComponent(typeof(Player))]
 public class PlayerUltra : MonoBehaviour
 {
-    public bool IsUltraReady { get => isUltraReady; }
+    public bool IsUltraReady { get => _isUltraReady; }
 
-    [SerializeField] Spawner _spawner;
+    [SerializeField] private Spawner _spawner;
 
-    Player player;
-    bool isUltraReady = false;
+    private Player _player;
+    private bool _isUltraReady = false;
 
-    void OnEnable()
+    private void OnEnable()
     {
-        player = GetComponent<Player>();
+        _player = GetComponent<Player>();
         GlobalEventManager.OnStrenghtChange.AddListener(checkUltra);
     }
 
-    void checkUltra(float strenght, float maxStrenght)
+    private void checkUltra(float strenght, float maxStrenght)
     {
         if (strenght == maxStrenght)
         {
@@ -26,15 +26,15 @@ public class PlayerUltra : MonoBehaviour
         }
     }
 
-    void setUltra(bool state)
+    private void setUltra(bool state)
     {
-        isUltraReady = state;
+        _isUltraReady = state;
         GlobalEventManager.OnUltraStateChanged.Fire(state);
     }
 
     public void UseUltra()
     {
-        if (isUltraReady)
+        if (_isUltraReady)
         {
             List<Enemy> activeEnemies = Utils.GetActiveEnemies();
 
@@ -44,7 +44,7 @@ public class PlayerUltra : MonoBehaviour
                 enemy.gameObject.SetActive(false);
             }
 
-            player.ApplyStrenghtChanges(player.MaxStrenght);
+            _player.ApplyStrenghtChanges(_player.MaxStrenght);
 
             setUltra(false);
         }

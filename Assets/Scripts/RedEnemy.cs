@@ -5,51 +5,51 @@ using UnityEngine;
 [RequireComponent(typeof(ObjectFollower))]
 public class RedEnemy : Enemy
 {
-    [SerializeField] float _hitDamage = 15f;
-    [SerializeField] float _flyUpSpeed = 3f;
-    [SerializeField] float _flyUpDistance = 2f;
+    [SerializeField] private float _hitDamage = 15f;
+    [SerializeField] private float _flyUpSpeed = 3f;
+    [SerializeField] private float _flyUpDistance = 2f;
 
-    ObjectFollower objectFollower;
-    float startBaseOffset;
-    Coroutine flyUpProcess;
+    private ObjectFollower _objectFollower;
+    private float _startBaseOffset;
+    private Coroutine _flyUpProcess;
 
     public override void Init()
     {
         base.Init();
 
-        objectFollower = GetComponent<ObjectFollower>();
-        startBaseOffset = agent.baseOffset;
+        _objectFollower = GetComponent<ObjectFollower>();
+        _startBaseOffset = Agent.baseOffset;
 
-        flyUpProcess = StartCoroutine(flyUp());
+        _flyUpProcess = StartCoroutine(flyUp());
     }
 
     protected override void FixedUpdate()
     {
-        if (agent.enabled && isFliedUp)
+        if (Agent.enabled && IsFliedUp)
         {
             base.FixedUpdate();
         }
     }
 
-    override protected void attackPlayer()
+    override protected void AttackPlayer()
     {
         // stop the enemy
-        agent.SetDestination(transform.position);
-        agent.enabled = false;
-        objectFollower.StartMoving(player.transform);
+        Agent.SetDestination(transform.position);
+        Agent.enabled = false;
+        _objectFollower.StartMoving(Player.transform);
     }
 
-    IEnumerator flyUp()
+    private IEnumerator flyUp()
     {
-        agent.baseOffset = -_flyUpDistance;
-        while (agent.baseOffset < startBaseOffset)
+        Agent.baseOffset = -_flyUpDistance;
+        while (Agent.baseOffset < _startBaseOffset)
         {
-            agent.baseOffset += _flyUpSpeed * Time.deltaTime;
+            Agent.baseOffset += _flyUpSpeed * Time.deltaTime;
             yield return null;
         }
 
-        flyUpProcess = null;
-        isFliedUp = true;
+        _flyUpProcess = null;
+        IsFliedUp = true;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -57,7 +57,7 @@ public class RedEnemy : Enemy
         string tag = other.tag;
         if (tag == "Player")
         {
-            player.GetComponent<Player>().ApplyHealthChanges(_hitDamage);
+            Player.GetComponent<Player>().ApplyHealthChanges(_hitDamage);
             GlobalEventManager.OnEnemyDeath.Fire(this);
             gameObject.SetActive(false);
         }
@@ -65,10 +65,10 @@ public class RedEnemy : Enemy
 
     private void OnDisable()
     {
-        agent.enabled = true;
-        if(flyUpProcess != null)
+        Agent.enabled = true;
+        if(_flyUpProcess != null)
         {
-            StopCoroutine(flyUpProcess);
+            StopCoroutine(_flyUpProcess);
         }
     }
 }

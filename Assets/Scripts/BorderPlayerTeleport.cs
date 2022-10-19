@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class BorderPlayerTeleport : MonoBehaviour
 {
-    Player player;
-    Spawner enemySpawner;
+    private Player _player;
+    private Spawner _enemySpawner;
 
     private void Start()
     {
-        player = GameObject.FindObjectOfType<Player>();
-        enemySpawner = GameObject.FindObjectOfType<Spawner>();
+        _player = GameObject.FindObjectOfType<Player>();
+        _enemySpawner = GameObject.FindObjectOfType<Spawner>();
     }
 
     private void OnTriggerExit(Collider other)
@@ -49,17 +49,17 @@ public class BorderPlayerTeleport : MonoBehaviour
             }
             else
             {
-                avaregeEnemyPos = new Vector3(1, player.transform.position.y, 1);
+                avaregeEnemyPos = new Vector3(1, _player.transform.position.y, 1);
             }
 
 
             Vector3 enemyPosDir = transform.position - avaregeEnemyPos;
             Vector3 oppositeCorner = enemyPosDir.normalized * (transform.localScale.x / 2 - 0.2f);
-            oppositeCorner.y = player.transform.position.y;
+            oppositeCorner.y = _player.transform.position.y;
 
             GlobalEventManager.OnOppositeCornerMove.Fire();
-            player.transform.position = oppositeCorner;
-            player.transform.LookAt(transform, player.transform.up);
+            _player.transform.position = oppositeCorner;
+            _player.transform.LookAt(transform, _player.transform.up);
         }
     }
 

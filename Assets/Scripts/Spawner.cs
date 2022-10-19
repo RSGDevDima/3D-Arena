@@ -5,32 +5,32 @@ using UnityEngine;
 public class Spawner : MonoBehaviour
 {
     [Header("Spawn settings")]
-    [SerializeField] float _maxSpawnSpeed = 2f;
-    [SerializeField] float _minSpawnSpeed = 5f;
-    [SerializeField] float _speedDecreasingStep = 0.5f;
+    [SerializeField] private float _maxSpawnSpeed = 2f;
+    [SerializeField] private float _minSpawnSpeed = 5f;
+    [SerializeField] private float _speedDecreasingStep = 0.5f;
     [Tooltip("The radius from player of enemy spawning area")]
-    [SerializeField] float _enemySpawnRadius = 5f;
+    [SerializeField] private float _enemySpawnRadius = 5f;
 
     [Header("Enemy settings")]
-    [SerializeField] float _redEnemyYSpawnPoint = 0.4f;
-    [SerializeField] int _startBlueEmount = 1;
-    [SerializeField] int _blueAmountStep = 1;
+    [SerializeField] private float _redEnemyYSpawnPoint = 0.4f;
+    [SerializeField] private int _startBlueEmount = 1;
+    [SerializeField] private int _blueAmountStep = 1;
 
-    Player player;
-    float currentRedAmount = 0;
-    float currentBlueAmount = 0;
+    private Player _player;
+    private float _currentRedAmount = 0;
+    private float _currentBlueAmount = 0;
 
-    const string RED_ENEMY_TAG = "RedEnemy";
-    const string BLUE_ENEMY_TAG = "BlueEnemy";
+    private const string RED_ENEMY_TAG = "RedEnemy";
+    private const string BLUE_ENEMY_TAG = "BlueEnemy";
 
     void Start()
     {
-        player = GameObject.FindObjectOfType<Player>();
-        StartCoroutine(spawnProcess());
+        _player = GameObject.FindObjectOfType<Player>();
+        StartCoroutine(SpawnProcess());
         GlobalEventManager.OnEnemyDeath.AddListener(OnEmenyDeath);
     }
 
-    IEnumerator spawnProcess()
+    private IEnumerator SpawnProcess()
     {
         float currentSpawnSpeed = _minSpawnSpeed;
         float blueAmount = _startBlueEmount;
@@ -50,26 +50,26 @@ public class Spawner : MonoBehaviour
             };
 
             Vector3 spawnPoint;
-            while (!RandomMeshPoint(player.transform.position, _enemySpawnRadius, out spawnPoint)) ;
+            while (!RandomMeshPoint(_player.transform.position, _enemySpawnRadius, out spawnPoint)) ;
 
-            float neededRedAmount = currentBlueAmount * 4;
-            float availableRedAmount = neededRedAmount - currentRedAmount;
+            float neededRedAmount = _currentBlueAmount * 4;
+            float availableRedAmount = neededRedAmount - _currentRedAmount;
 
-            if (blueAmount > currentBlueAmount && availableRedAmount <= 0)
+            if (blueAmount > _currentBlueAmount && availableRedAmount <= 0)
             {
-                spawnEnemy(BLUE_ENEMY_TAG, spawnPoint);
-                currentBlueAmount++;
+                SpawnEnemy(BLUE_ENEMY_TAG, spawnPoint);
+                _currentBlueAmount++;
             }
             else if (availableRedAmount > 0)
             {
                 spawnPoint.y = _redEnemyYSpawnPoint; // To spawn red on the "second floor"
-                spawnEnemy(RED_ENEMY_TAG, spawnPoint);
-                currentRedAmount++;
+                SpawnEnemy(RED_ENEMY_TAG, spawnPoint);
+                _currentRedAmount++;
             }
         }
     }
 
-    void spawnEnemy(string enemyTag, Vector3 spawnPoint)
+    void SpawnEnemy(string enemyTag, Vector3 spawnPoint)
     {
         GameObject enemy =  ObjectPooller.Current.GetPooledObject(enemyTag);
         enemy.transform.position = spawnPoint;
@@ -94,11 +94,11 @@ public class Spawner : MonoBehaviour
     {
         if (enemy.GetComponent<RedEnemy>())
         {
-            currentRedAmount--;
+            _currentRedAmount--;
         }
         else
         {
-            currentBlueAmount--;
+            _currentBlueAmount--;
         }
     }
 

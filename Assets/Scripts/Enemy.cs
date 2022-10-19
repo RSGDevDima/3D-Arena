@@ -10,16 +10,16 @@ public abstract class Enemy : MonoBehaviour
     public float WalkPointRange;
 
     [SerializeField] protected float _sightRange, _attackRange;
-    [SerializeField] float _maxHealth = 100f;
-    [SerializeField] float _strengthReward = 50f;
+    [SerializeField] private float _maxHealth = 100f;
+    [SerializeField] private float _strengthReward = 50f;
 
-    protected NavMeshAgent agent;
-    protected Transform player;
-    protected float health;
+    protected NavMeshAgent Agent;
+    protected Transform Player;
+    protected float Health;
 
-    protected bool playerInSightRange, playerInAttackRange;
-    protected bool walkPointSet;
-    protected bool isFliedUp = false;
+    protected bool PlayerInSightRange, PlayerInAttackRange;
+    protected bool WalkPointSet;
+    protected bool IsFliedUp = false;
 
     public float StrengthReward { get => _strengthReward; }
     public float MaxHealth { get => _maxHealth; }
@@ -30,39 +30,39 @@ public abstract class Enemy : MonoBehaviour
 
     public virtual void Init()
     {
-        health = _maxHealth;
-        player = GameObject.Find("Player").transform;
-        agent = GetComponent<NavMeshAgent>();
+        Health = _maxHealth;
+        Player = GameObject.Find("Player").transform;
+        Agent = GetComponent<NavMeshAgent>();
     }
 
     protected virtual void FixedUpdate()
     {
 
-        playerInSightRange = Physics.CheckSphere(transform.position, _sightRange, WhatIsPlayer);
-        playerInAttackRange = Physics.CheckSphere(transform.position, _attackRange, WhatIsPlayer);
+        PlayerInSightRange = Physics.CheckSphere(transform.position, _sightRange, WhatIsPlayer);
+        PlayerInAttackRange = Physics.CheckSphere(transform.position, _attackRange, WhatIsPlayer);
 
-        RaycastHit forwardObstacleHit = obstacleInWay(transform.position - player.transform.position, _attackRange);
+        RaycastHit forwardObstacleHit = ObstacleInWay(transform.position - Player.transform.position, _attackRange);
 
         if (forwardObstacleHit.distance <= _sightRange && forwardObstacleHit.collider.tag == "Player")
         {
-            if (playerInAttackRange)
+            if (PlayerInAttackRange)
             {
-                attackPlayer();
+                AttackPlayer();
             }
-            else if (playerInSightRange)
+            else if (PlayerInSightRange)
             {
-                chasePlayer();
+                ChasePlayer();
             }
         }
         else
         {
-            patroling();
+            Patroling();
         }
     }
 
-    protected abstract void attackPlayer();
+    protected abstract void AttackPlayer();
 
-    void searchWalkPoint()
+    private void SearchWalkPoint()
     {
         float randomZ = Random.Range(-WalkPointRange, WalkPointRange);
         float randomX = Random.Range(-WalkPointRange, WalkPointRange);
@@ -71,10 +71,10 @@ public abstract class Enemy : MonoBehaviour
 
         // is that point on the ground
         if (Physics.Raycast(WalkPoint, -transform.up, 2f, WhatIsGround))
-            walkPointSet = true;
+            WalkPointSet = true;
     }
 
-    RaycastHit obstacleInWay(Vector3 vector, float rayLenght)
+    private RaycastHit ObstacleInWay(Vector3 vector, float rayLenght)
     {
         RaycastHit hit;
         Physics.Raycast(transform.position, -vector.normalized, out hit);
@@ -82,12 +82,12 @@ public abstract class Enemy : MonoBehaviour
         return hit;
     }
 
-    void patroling()
+    private void Patroling()
     {
-        if (!walkPointSet) searchWalkPoint();
+        if (!WalkPointSet) SearchWalkPoint();
 
-        if (walkPointSet)
-            agent.SetDestination(WalkPoint);
+        if (WalkPointSet)
+            Agent.SetDestination(WalkPoint);
 
         Vector3 distanceToWalkPoint = transform.position - WalkPoint;
 
@@ -95,25 +95,25 @@ public abstract class Enemy : MonoBehaviour
         // WalkPoint reched
         if (distanceToWalkPoint.magnitude < 1f)
         {
-            walkPointSet = false;
+            WalkPointSet = false;
         }
     }
 
-    void chasePlayer()
+    private void ChasePlayer()
     {
-        agent.SetDestination(player.position);
+        Agent.SetDestination(Player.position);
     }
 
     public void ApplyHealthChanges(float points, out float remainHealth)
     {
-        health += points;
-        remainHealth = health;
-        checkHealth();
+        Health += points;
+        remainHealth = Health;
+        CheckHealth();
     }
 
-    void checkHealth()
+    private void CheckHealth()
     {
-        if (health <= 0)
+        if (Health <= 0)
         {
             GlobalEventManager.OnRewardedEnemyDeath.Fire(this, _strengthReward);
             gameObject.SetActive(false);

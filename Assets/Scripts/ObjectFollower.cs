@@ -6,40 +6,40 @@ using static UnityEngine.GraphicsBuffer;
 
 public class ObjectFollower : MonoBehaviour
 {
-    [SerializeField] float _speed = 2f;
-    [SerializeField] float _timeBeforeDestroy = 2f;
-    Coroutine moving;
-    Vector3 vectorToTarget;
+    [SerializeField] private float _speed = 2f;
+    [SerializeField] private float _timeBeforeDestroy = 2f;
+    private Coroutine _moving;
+    private Vector3 _vectorToTarget;
 
     public void StartMoving(Transform target)
     {
-        moving = StartCoroutine(startMoving(target));
-        GlobalEventManager.OnOppositeCornerMove.AddListener(stopFollowing);
+        _moving = StartCoroutine(StartMovingProcess(target));
+        GlobalEventManager.OnOppositeCornerMove.AddListener(StopFollowing);
     }
 
-    IEnumerator startMoving(Transform target)
+    private IEnumerator StartMovingProcess(Transform target)
     {
   
         while (enabled)
         {
-            vectorToTarget = target.transform.position - transform.position;
-            transform.position = transform.position + vectorToTarget.normalized * _speed * Time.deltaTime;
+            _vectorToTarget = target.transform.position - transform.position;
+            transform.position = transform.position + _vectorToTarget.normalized * _speed * Time.deltaTime;
             yield return new WaitForFixedUpdate();
         }
     }
 
-    void stopFollowing()
+    private void StopFollowing()
     {
-        StartCoroutine(stopFollowingProcess());
+        StartCoroutine(StopFollowingProcess());
     }
 
-    IEnumerator stopFollowingProcess()
+    private IEnumerator StopFollowingProcess()
     {
-        StopCoroutine(moving);
+        StopCoroutine(_moving);
 
         while (_timeBeforeDestroy > 0)
         {
-            transform.position += vectorToTarget * Time.deltaTime;
+            transform.position += _vectorToTarget * Time.deltaTime;
             _timeBeforeDestroy -= Time.fixedDeltaTime;
             yield return new WaitForFixedUpdate();
         }
@@ -49,6 +49,6 @@ public class ObjectFollower : MonoBehaviour
 
     private void OnDisable()
     {
-        GlobalEventManager.OnOppositeCornerMove.RemoveListener(stopFollowing);
+        GlobalEventManager.OnOppositeCornerMove.RemoveListener(StopFollowing);
     }
 }

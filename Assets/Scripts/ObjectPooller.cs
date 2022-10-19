@@ -12,8 +12,8 @@ public class PoollerItem
 
 public class ObjectPooller : MonoBehaviour
 {
-    [SerializeField] List<PoollerItem> itemsToPull = new List<PoollerItem>();
-    public List<GameObject> pool;
+    [SerializeField] private List<PoollerItem> _itemsToPull = new List<PoollerItem>();
+    public List<GameObject> Pool;
     [HideInInspector]
     public static ObjectPooller Current;
 
@@ -24,7 +24,7 @@ public class ObjectPooller : MonoBehaviour
 
     private void Start()
     {
-        foreach (var item in itemsToPull)
+        foreach (var item in _itemsToPull)
         {
             for (int i = 0; i < item.PremadeAmount; i++)
             {
@@ -35,7 +35,7 @@ public class ObjectPooller : MonoBehaviour
 
     public GameObject GetPooledObject(string tag)
     {
-        foreach (var item in pool)
+        foreach (var item in Pool)
         {
             if (item.tag == tag && !item.activeInHierarchy)
             {
@@ -43,7 +43,7 @@ public class ObjectPooller : MonoBehaviour
             }
         }
 
-        foreach (var item in itemsToPull)
+        foreach (var item in _itemsToPull)
         {
             if (item.ObjectToPool.tag == tag)
             {
@@ -59,7 +59,7 @@ public class ObjectPooller : MonoBehaviour
     {
         List<GameObject> resultList = new List<GameObject>();
 
-        foreach (var item in pool)
+        foreach (var item in Pool)
         {
             if (item.tag == tag && item.active)
             {
@@ -77,7 +77,7 @@ public class ObjectPooller : MonoBehaviour
     {
         GameObject instance = Instantiate(gameObject);
         instance.SetActive(false);
-        pool.Add(instance);
+        Pool.Add(instance);
 
         return instance;
     }

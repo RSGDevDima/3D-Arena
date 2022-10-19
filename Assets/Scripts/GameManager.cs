@@ -2,21 +2,21 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    Player player;
-    int score;
+    private Player _player;
+    private int _score;
 
-    void Start()
+    private void Start()
     {
         ResumeGame();
-        player = GameObject.FindObjectOfType<Player>();
+        _player = GameObject.FindObjectOfType<Player>();
         SubscribeListeners();
-        initScore();
+        InitScore();
     }
 
-    void initScore()
+    private void InitScore()
     {
-        score = 0;
-        GlobalEventManager.OnScoreInit.Fire(score);
+        _score = 0;
+        GlobalEventManager.OnScoreInit.Fire(_score);
     }
 
     public void SubscribeListeners() {
@@ -26,16 +26,16 @@ public class GameManager : MonoBehaviour
     }
     
     public void OnRewardedEnemyDeath(Enemy enemy, float reward){
-        player.ApplyStrenghtChanges(-reward);
-        score++;
-        GlobalEventManager.OnScoreChange.Fire(score);
+        _player.ApplyStrenghtChanges(-reward);
+        _score++;
+        GlobalEventManager.OnScoreChange.Fire(_score);
     }
 
     public void OnExtraDeath(){
-        if(player.Health < player.MaxHealth){
-            player.ApplyHealthChanges(-(player.MaxHealth / 2));
+        if(_player.Health < _player.MaxHealth){
+            _player.ApplyHealthChanges(-(_player.MaxHealth / 2));
         } else{
-            player.ApplyStrenghtChanges(-(player.MaxStrenght / 2));
+            _player.ApplyStrenghtChanges(-(_player.MaxStrenght / 2));
         }
     }
 

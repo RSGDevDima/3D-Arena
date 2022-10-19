@@ -4,37 +4,36 @@ using UnityEngine;
 
 public class BlueEnemy : Enemy
 {
-    public float timeBetweenAttacks;
+    public float TimeBetweenAttacks;
 
-    [SerializeField] ObjectFollower _enemyBulletObject;
+    [SerializeField] private ObjectFollower _enemyBulletObject;
     
-    bool alreadyAttacked;
+    private bool _alreadyAttacked;
 
-
-    override protected void attackPlayer()
+    override protected void AttackPlayer()
     {
-        WalkPoint = player.position;
+        WalkPoint = Player.position;
 
         // stop the enemy
-        agent.SetDestination(transform.position);
+        Agent.SetDestination(transform.position);
 
-        transform.LookAt(player);
+        transform.LookAt(Player);
 
-        if (!alreadyAttacked)
+        if (!_alreadyAttacked)
         {
-            spawnBullet();
+            SpawnBullet();
 
-            alreadyAttacked = true;
-            Invoke(nameof(resetAttack), timeBetweenAttacks);
+            _alreadyAttacked = true;
+            Invoke(nameof(ResetAttack), TimeBetweenAttacks);
         }
     }
 
-    void resetAttack()
+    private void ResetAttack()
     {
-        alreadyAttacked = false;
+        _alreadyAttacked = false;
     }
 
-    void spawnBullet()
+    private void SpawnBullet()
     {
         Vector3 spawnPos = transform.position + transform.forward * transform.localScale.z;
 
@@ -44,7 +43,6 @@ public class BlueEnemy : Enemy
         bulletObject.SetActive(true);
 
         ObjectFollower objectFollower = bulletObject.GetComponent<ObjectFollower>();
-        objectFollower.StartMoving(player);
+        objectFollower.StartMoving(Player);
     }
-    
 }

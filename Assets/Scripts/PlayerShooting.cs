@@ -4,22 +4,22 @@ using UnityEngine;
 
 public class PlayerShooting : MonoBehaviour
 {
-    [SerializeField] float _fireRate = 20f;
-    [SerializeField] float _shellSpeed = 10f;
+    [SerializeField] private float _fireRate = 20f;
+    [SerializeField] private float _shellSpeed = 10f;
 
     
-    Coroutine shootProcess;
+    private Coroutine _shootProcess;
 
     private void Start() {
         _shellSpeed /= 10;
     }
 
     public void Shoot(){
-        if(shootProcess == null)
-            shootProcess = StartCoroutine(shootSequence());
+        if(_shootProcess == null)
+            _shootProcess = StartCoroutine(ShootSequence());
     }
 
-    IEnumerator shootSequence(){
+    private IEnumerator ShootSequence(){
         Camera mainCamera = Camera.main;
         Vector3 spawnPosition = mainCamera.transform.position + mainCamera.transform.forward.normalized / 10;
 
@@ -32,7 +32,7 @@ public class PlayerShooting : MonoBehaviour
         shellScript.MoveInDirection(mainCamera.transform.forward, _shellSpeed);
 
         yield return new WaitForSeconds(100 / _fireRate);
-        shootProcess = null;
+        _shootProcess = null;
     }
 
 }

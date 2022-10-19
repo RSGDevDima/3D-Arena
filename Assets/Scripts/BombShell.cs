@@ -8,9 +8,9 @@ public class BombShell : MonoBehaviour
     [SerializeField] float _minDamage = 15f;
     [SerializeField] float _maxDamage = 30f;
 
-    bool isRebounded = false;
-    Coroutine movingProcess = null;
-    float speed;
+    private bool _isRebounded = false;
+    private Coroutine _movingProcess = null;
+    private float _speed;
 
     private void OnEnable()
     {
@@ -23,20 +23,20 @@ public class BombShell : MonoBehaviour
 
     public void MoveInDirection(Vector3 direction, float speed)
     {
-        this.speed = speed;
-        startMovingProcess(direction, speed);
-        StartCoroutine(timerForDestroy());
+        this._speed = speed;
+        StartMovingProcess(direction, speed);
+        StartCoroutine(TimerForDestroy());
     }
 
-    void startMovingProcess(Vector3 direction, float speed){
-        if(movingProcess != null){
-            StopCoroutine(movingProcess);
+    private void StartMovingProcess(Vector3 direction, float speed){
+        if(_movingProcess != null){
+            StopCoroutine(_movingProcess);
         }
 
-        movingProcess = StartCoroutine(moveInDirectionProcess(direction, speed));
+        _movingProcess = StartCoroutine(MoveInDirectionProcess(direction, speed));
     }
 
-    IEnumerator moveInDirectionProcess(Vector3 direction, float speed)
+    private IEnumerator MoveInDirectionProcess(Vector3 direction, float speed)
     {
         while (true)
         {
@@ -45,7 +45,7 @@ public class BombShell : MonoBehaviour
         }
     }
 
-    IEnumerator timerForDestroy()
+    private IEnumerator TimerForDestroy()
     {
         yield return new WaitForSeconds(_lifeTime);
         gameObject.SetActive(false);
@@ -62,37 +62,36 @@ public class BombShell : MonoBehaviour
             return;
         }
 
-        handleDamage(other);
+        HandleDamage(other);
     }
 
-    void handleDamage(Collider obj)
+    private void HandleDamage(Collider obj)
     {
-        Debug.Log("Handle damage");
         Enemy enemy = obj.gameObject.GetComponent<Enemy>();
 
         float enemyMaxHealth = enemy.MaxHealth;
         float remainEnemyHealth;
 
-        float damage = getDamage();
+        float damage = GetDamage();
         enemy.ApplyHealthChanges(-damage, out remainEnemyHealth);
 
-        if(remainEnemyHealth <= 0 && isRebounded){
+        if(remainEnemyHealth <= 0 && _isRebounded){
             GlobalEventManager.OnExtraDeath.Fire();
             gameObject.SetActive(false);
 
             return;
         }
 
-        handleExtra(remainEnemyHealth, enemyMaxHealth);
+        HandleExtra(remainEnemyHealth, enemyMaxHealth);
     }
 
-    void handleExtra(float remainEnemyHealth, float enemyMaxHealth){
+    private void HandleExtra(float remainEnemyHealth, float enemyMaxHealth){
         float extraChance = (100 - (remainEnemyHealth / enemyMaxHealth * 100)) / 2;
         bool isExtra = Random.Range(0, 100) <= extraChance;
 
         if (remainEnemyHealth <= 0 && isExtra)
         {
-            isRebounded = true;
+            _isRebounded = true;
 
             RaycastHit hit;
             Physics.Raycast(transform.position, transform.forward, out hit);
@@ -103,7 +102,7 @@ public class BombShell : MonoBehaviour
             if(hitAngle > 100 && hitAngle < 150){
                 // new shell direction
                 Vector3 reboundedDirection = Vector3.Reflect(transform.forward, surfaceNormal);
-                startMovingProcess(reboundedDirection, speed / 3);
+                StartMovingProcess(reboundedDirection, _speed / 3);
             }
         }
         else
@@ -112,7 +111,7 @@ public class BombShell : MonoBehaviour
         }
     }
 
-    float getDamage()
+    private float GetDamage()
     {
         return Random.Range(_minDamage, _maxDamage);
     }

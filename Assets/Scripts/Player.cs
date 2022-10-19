@@ -8,17 +8,17 @@ using TMPro;
 public class Player : MonoBehaviour
 {
     [Header("Health")]
-    [SerializeField] float _maxHealth = 100f;
-    [SerializeField] float _maxStrength = 100f;
+    [SerializeField] private float _maxHealth = 100f;
+    [SerializeField] private float _maxStrength = 100f;
 
     [Space(5)]
     [Header("Strenght")]
-    [SerializeField] float _initialHealth = 100f;
-    [SerializeField] float _initialStrength = 50f;
+    [SerializeField] private float _initialHealth = 100f;
+    [SerializeField] private float _initialStrength = 50f;
 
     
     public float Health{
-        get{ return health;}
+        get{ return _health;}
     }
 
     public float MaxHealth{
@@ -26,42 +26,41 @@ public class Player : MonoBehaviour
     }
 
     public float Strenght{
-        get{ return strength;}
+        get{ return _strength;}
     }
 
     public float MaxStrenght{
         get{ return _maxStrength;}
     }
 
-    float health = 0;
-    float strength = 0;
+    private float _health = 0;
+    private float _strength = 0;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         // Check if initial > max
-        health = Mathf.Clamp(_initialHealth, 0, _maxHealth);
-        strength = Mathf.Clamp(_initialStrength, 0, _maxStrength);
+        _health = Mathf.Clamp(_initialHealth, 0, _maxHealth);
+        _strength = Mathf.Clamp(_initialStrength, 0, _maxStrength);
 
-        GlobalEventManager.OnPlayerInit.Fire(health, _maxHealth, strength, _maxStrength);
+        GlobalEventManager.OnPlayerInit.Fire(_health, _maxHealth, _strength, _maxStrength);
     }
 
     public void ApplyHealthChanges(float changePoints){
-        health -= changePoints;
-        health = Mathf.Clamp(health, 0, _maxHealth);
-        GlobalEventManager.OnHealthChange.Fire(health, _maxHealth);
-        checkHealth();
+        _health -= changePoints;
+        _health = Mathf.Clamp(_health, 0, _maxHealth);
+        GlobalEventManager.OnHealthChange.Fire(_health, _maxHealth);
+        CheckHealth();
     }
 
-    void checkHealth()
+    private void CheckHealth()
     {
-        if (health == 0)
+        if (_health == 0)
             GlobalEventManager.OnEndgame.Fire();
     }
 
     public void ApplyStrenghtChanges(float changePoints){
-        strength -= changePoints;
-        strength = Mathf.Clamp(strength, 0, _maxStrength);
-        GlobalEventManager.OnStrenghtChange.Fire(strength, _maxStrength);
+        _strength -= changePoints;
+        _strength = Mathf.Clamp(_strength, 0, _maxStrength);
+        GlobalEventManager.OnStrenghtChange.Fire(_strength, _maxStrength);
     }
 }

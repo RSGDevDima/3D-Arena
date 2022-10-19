@@ -6,6 +6,23 @@ using System;
 
 public static class GlobalEventManager
 {
+    public static class OnEnemyDamage
+    {
+        static Action s_listenerList;
+
+        public static void AddListener(Action listener){
+            s_listenerList += listener;
+        }
+
+        public static void RemoveListener(Action listener){
+            s_listenerList -= listener;
+        }
+
+        public static void Fire(){
+            s_listenerList?.Invoke();
+        }
+    }
+    
     public static class OnRewardedEnemyDeath
     {
         static Action<Enemy, float> s_listenerList;

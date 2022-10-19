@@ -8,6 +8,8 @@ using UnityEngine.SceneManagement;
 public class GameUI : MonoBehaviour
 {
     [SerializeField] private GameManager _gameManager;
+    [SerializeField] private GameObject _hitIndicatorObject;
+    [SerializeField] private float _hitIndicatorTime = 1f;
     [SerializeField] private TMP_Text _killsText;
     [SerializeField] private TMP_Text _hpText;
     [SerializeField] private TMP_Text _strengthText;
@@ -16,6 +18,8 @@ public class GameUI : MonoBehaviour
     [SerializeField] private GameObject _endgameScreen;
     [SerializeField] private GameObject _ultraButton;
 
+    private Coroutine _hitIndicatorProcess;
+    private float _hitTimeLeft = 0;
 
     private void OnEnable()
     {
@@ -26,6 +30,7 @@ public class GameUI : MonoBehaviour
         GlobalEventManager.OnPlayerInit.AddListener(InitPlayerValues);
         GlobalEventManager.OnScoreInit.AddListener(InitScore);
         GlobalEventManager.OnUltraStateChanged.AddListener(ToggleUltraButton);
+        GlobalEventManager.OnEnemyDamage.AddListener(ShowHitIndicator);
     }
 
     private void Update()
@@ -116,6 +121,27 @@ public class GameUI : MonoBehaviour
         }
     }
 
+    private void ShowHitIndicator(){
+        Debug.Log($"Show hit...");
+        _hitTimeLeft += _hitIndicatorTime;
+
+        if(_hitIndicatorProcess == null){
+            _hitIndicatorProcess = StartCoroutine(HitIndicatorProcess());
+        }
+    }
+
+    private IEnumerator HitIndicatorProcess(){
+        _hitIndicatorObject.SetActive(true);
+
+        while(_hitTimeLeft > 0){
+            _hitTimeLeft -= Time.deltaTime;
+            yield return null;
+        }
+
+        _hitIndicatorProcess = null;
+        _hitIndicatorObject.SetActive(false);
+    }
+
     private void OnDestroy()
     {
         GlobalEventManager.OnScoreChange.RemoveListener(SetKills);
@@ -125,5 +151,6 @@ public class GameUI : MonoBehaviour
         GlobalEventManager.OnPlayerInit.RemoveListener(InitPlayerValues);
         GlobalEventManager.OnScoreInit.RemoveListener(InitScore);
         GlobalEventManager.OnUltraStateChanged.RemoveListener(ToggleUltraButton);
+        GlobalEventManager.OnEnemyDamage.RemoveListener(ShowHitIndicator);
     }
 }

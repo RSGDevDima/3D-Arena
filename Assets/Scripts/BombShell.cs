@@ -28,8 +28,10 @@ public class BombShell : MonoBehaviour
         StartCoroutine(TimerForDestroy());
     }
 
-    private void StartMovingProcess(Vector3 direction, float speed){
-        if(_movingProcess != null){
+    private void StartMovingProcess(Vector3 direction, float speed)
+    {
+        if (_movingProcess != null)
+        {
             StopCoroutine(_movingProcess);
         }
 
@@ -55,13 +57,16 @@ public class BombShell : MonoBehaviour
     {
         string tag = other.tag;
 
-        if (tag == "TeleportZone") return;
+        if (tag == "TeleportZone")
+            return;
+
         if (tag != "BlueEnemy" && tag != "RedEnemy")
         {
             gameObject.SetActive(false);
             return;
         }
 
+        GlobalEventManager.OnEnemyDamage.Fire();
         HandleDamage(other);
     }
 
@@ -75,7 +80,8 @@ public class BombShell : MonoBehaviour
         float damage = GetDamage();
         enemy.ApplyHealthChanges(-damage, out remainEnemyHealth);
 
-        if(remainEnemyHealth <= 0 && _isRebounded){
+        if (remainEnemyHealth <= 0 && _isRebounded)
+        {
             GlobalEventManager.OnExtraDeath.Fire();
             gameObject.SetActive(false);
 
@@ -85,7 +91,8 @@ public class BombShell : MonoBehaviour
         HandleExtra(remainEnemyHealth, enemyMaxHealth);
     }
 
-    private void HandleExtra(float remainEnemyHealth, float enemyMaxHealth){
+    private void HandleExtra(float remainEnemyHealth, float enemyMaxHealth)
+    {
         float extraChance = (100 - (remainEnemyHealth / enemyMaxHealth * 100)) / 2;
         bool isExtra = Random.Range(0, 100) <= extraChance;
 
@@ -97,9 +104,10 @@ public class BombShell : MonoBehaviour
             Physics.Raycast(transform.position, transform.forward, out hit);
 
             Vector3 surfaceNormal = hit.normal;
-            float hitAngle = (float)(Vector3.AngleBetween(transform.forward,surfaceNormal) * 180 / 3.14);
+            float hitAngle = (float)(Vector3.AngleBetween(transform.forward, surfaceNormal) * 180 / 3.14);
 
-            if(hitAngle > 100 && hitAngle < 150){
+            if (hitAngle > 100 && hitAngle < 150)
+            {
                 // new shell direction
                 Vector3 reboundedDirection = Vector3.Reflect(transform.forward, surfaceNormal);
                 StartMovingProcess(reboundedDirection, _speed / 3);

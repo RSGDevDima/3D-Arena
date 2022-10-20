@@ -13,6 +13,7 @@ public class PlayerMovement : MonoBehaviour
 
     private CharacterController _characterController;
     private float _xCameraRotation;
+    private int _rightSideTouchID;
 
     private void Awake()
     {
@@ -67,8 +68,12 @@ public class PlayerMovement : MonoBehaviour
             // if touch in right side of the screen
             if (touch.position.x > Screen.width / 2)
             {
-                Vector2 delta = touch.deltaPosition * _sensetive * Time.deltaTime;
-                RotateCamera(delta);
+                _rightSideTouchID = touch.fingerId;
+
+                if(touch.fingerId == _rightSideTouchID){
+                    Vector2 delta = touch.deltaPosition * _sensetive * Time.deltaTime;
+                    RotateCamera(delta);
+                }
             }
         }
     }

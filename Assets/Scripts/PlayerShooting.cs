@@ -24,14 +24,12 @@ public class PlayerShooting : MonoBehaviour
 
     public void Shoot()
     {
-        Debug.Log($"shoot");
         if (_shootProcess == null && Time.timeScale != 0)
         {
             if (EventSystem.current.IsPointerOverGameObject() && EventSystem.current.currentSelectedGameObject != null)
                 return;
             _shootProcess = StartCoroutine(ShootSequence());
         }
-
     }
 
     private IEnumerator ShootSequence()

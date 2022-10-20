@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-
 [RequireComponent(typeof(NavMeshAgent))]
 public abstract class Enemy : MonoBehaviour
 {
@@ -19,7 +18,6 @@ public abstract class Enemy : MonoBehaviour
 
     protected bool PlayerInSightRange, PlayerInAttackRange;
     protected bool WalkPointSet;
-    protected bool IsFliedUp = false;
 
     public float StrengthReward { get => _strengthReward; }
     public float MaxHealth { get => _maxHealth; }

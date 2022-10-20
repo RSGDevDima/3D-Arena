@@ -165,7 +165,7 @@ MonoBehaviour:
   _maxHealth: 50
   _strengthReward: 15
   _hitDamage: 15
-  _flyUpSpeed: 3
+  _flyUpSpeed: 1
   _flyUpDistance: 2
 --- !u!114 &6839995877156282573
 MonoBehaviour:

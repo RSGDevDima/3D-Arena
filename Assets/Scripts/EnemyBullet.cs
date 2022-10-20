@@ -8,16 +8,15 @@ public class EnemyBullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (other.tag == "TeleportZone")
+            return;
+        
         if (other.tag == "Player")
         {
             Player player = other.gameObject.GetComponent<Player>();
             player.ApplyStrenghtChanges(_strengthDamage);
+        }
 
-            gameObject.SetActive(false);
-        }
-        else if (other.tag == "PlayerShell")
-        {
-            gameObject.SetActive(false);
-        }
+        gameObject.SetActive(false);
     }
 }

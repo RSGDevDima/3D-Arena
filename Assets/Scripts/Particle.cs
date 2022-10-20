@@ -6,9 +6,13 @@ public class Particle : MonoBehaviour
 {
     ParticleSystem _particleSystem;
 
-    private void OnEnable()
+    private void Awake()
     {
         _particleSystem = GetComponent<ParticleSystem>();
+    }
+
+    private void OnEnable()
+    {
         _particleSystem.Play(); 
     }
 }

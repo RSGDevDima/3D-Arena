@@ -7,9 +7,10 @@
         {
             "name": "Unity Editor",
             "type": "unity",
-            "path": "/D:/Unity/3D_Arena_Project/Library/EditorInstance.json",
+            "path": "${workspaceFolder}/Library/EditorInstance.json",
             "request": "launch"
         },
+
         {
             "name": "Windows Player",
             "type": "unity",

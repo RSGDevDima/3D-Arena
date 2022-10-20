@@ -159,7 +159,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   WalkPoint: {x: 0, y: 0, z: 0}
-  WalkPointRange: 20
+  WalkPointRange: 0
   _sightRange: 2.2
   _attackRange: 0.8
   _maxHealth: 50

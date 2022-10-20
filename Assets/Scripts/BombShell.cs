@@ -130,7 +130,7 @@ public class BombShell : MonoBehaviour
     private void SpawnParticle(string particleTag)
     {
         GameObject particle = ObjectPooller.Current.GetPooledObject(particleTag);
-        particle.transform.position = transform.position;
+        particle.transform.position = transform.position - (transform.forward * transform.localScale.x);
         particle.SetActive(true);
     }
 }

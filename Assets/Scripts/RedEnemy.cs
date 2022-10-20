@@ -16,7 +16,6 @@ public class RedEnemy : Enemy
     public override void Init()
     {
         base.Init();
-
         _objectFollower = GetComponent<ObjectFollower>();
         _startBaseOffset = Agent.baseOffset;
 

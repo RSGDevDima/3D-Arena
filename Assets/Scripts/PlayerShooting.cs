@@ -1,16 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PlayerShooting : MonoBehaviour
 {
     [SerializeField] private float _fireRate = 20f;
     [SerializeField] private float _shellSpeed = 10f;
 
-    
+
     private Coroutine _shootProcess;
 
-    private void Start() {
+    private void Start()
+    {
         _shellSpeed /= 10;
     }
 
@@ -20,12 +22,20 @@ public class PlayerShooting : MonoBehaviour
             Shoot();
     }
 
-    public void Shoot(){
-        if(_shootProcess == null)
+    public void Shoot()
+    {
+        Debug.Log($"shoot");
+        if (_shootProcess == null && Time.timeScale != 0)
+        {
+            if (EventSystem.current.IsPointerOverGameObject() && EventSystem.current.currentSelectedGameObject != null)
+                return;
             _shootProcess = StartCoroutine(ShootSequence());
+        }
+
     }
 
-    private IEnumerator ShootSequence(){
+    private IEnumerator ShootSequence()
+    {
         Camera mainCamera = Camera.main;
         Vector3 spawnPosition = mainCamera.transform.position + mainCamera.transform.forward.normalized / 10;
 
